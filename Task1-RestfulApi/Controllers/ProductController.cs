@@ -159,6 +159,7 @@ namespace Task1_RestfulApi.Controllers
 
             return new ApiResponse<Product>(existingProduct);
         }
+        // Product isim ve renk arasında filtreleme
         [HttpGet("products")]
         public IActionResult GetFilteredProducts([FromQuery] string name, [FromQuery] string sort, [FromQuery] string color)
         {
