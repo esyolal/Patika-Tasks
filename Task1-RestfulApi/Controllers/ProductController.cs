@@ -68,6 +68,27 @@ namespace Task1_RestfulApi.Controllers
 
             return Ok(new ApiResponse<List<Product>>(productsByColor));
         }
+        [HttpGet("byprice")]
+        public ActionResult<IEnumerable<Product>> GetProductsByColor([FromQuery] decimal price)
+        {
+            if (price == 0)
+            {
+                return BadRequest("Price parameter is required.");
+            }
+            if (price < 0)
+            {
+                return BadRequest("Price parameter must be a non-negative number.");
+            }
+
+            var productsByPrice = products.Where(p => p.Price >= price).OrderBy(p => p.Price).ToList();
+
+            if (productsByPrice.Count == 0)
+            {
+                return NotFound("No products found with the specified color.");
+            }
+
+            return Ok(new ApiResponse<List<Product>>(productsByPrice));
+        }
         /* [HttpPost]
         public ApiResponse<List<Product>> Post([FromBody] Product value)
         {
@@ -178,20 +199,6 @@ namespace Task1_RestfulApi.Controllers
         {
             return products?.FirstOrDefault(x => x.Id == id);
         }
-        [HttpGet("ByDetailQuery")]
-        public string ByIdQuery([FromQuery] int? id, [FromQuery] string? name, [FromQuery] decimal? price, [FromQuery] string color)
-        {
-            return $"id:{id}-name:{name}-price:{price}-color:{color}";
-        }
-        [HttpGet("ByDetailRoute/{id}/{name}/{price}")]
-        public string ByIdRoute(int? id, string? name, decimal? price, string? color)
-        {
-            return $"id:{id}-name:{name}-price:{price}-color:{color}";
-        }
-        [HttpGet("ByDetail/{id}")]
-        public string ByDetail(int? id, [FromQuery] string? name, [FromQuery] decimal? price, [FromQuery] string color)
-        {
-            return $"id:{id}-name:{name}-price:{price}-color:{color}";
-        }
+
     }
 }
