@@ -1,0 +1,6 @@
+@task2_restfulapi_HostAddress = http://localhost:5244
+
+GET {{task2_restfulapi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

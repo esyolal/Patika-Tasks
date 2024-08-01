@@ -163,16 +163,20 @@ namespace Task1_RestfulApi.Controllers
         [HttpGet("products")]
         public IActionResult GetFilteredProducts([FromQuery] string name, [FromQuery] string sort, [FromQuery] string color)
         {
+            // Filtered the list of products.
             var filteredProducts = products.AsQueryable();
 
+            // Filter by name
             if (!string.IsNullOrEmpty(name))
             {
                 filteredProducts = filteredProducts.Where(p => p.Name.Contains(name, System.StringComparison.OrdinalIgnoreCase));
             }
+            // Filter by color
             if (!string.IsNullOrEmpty(color))
             {
                 filteredProducts = filteredProducts.Where(p => p.Color.Contains(color, System.StringComparison.OrdinalIgnoreCase));
             }
+            // Sort by sort
             if (!string.IsNullOrEmpty(sort))
             {
                 switch (sort.ToLower())
@@ -188,6 +192,7 @@ namespace Task1_RestfulApi.Controllers
                         break;
                 }
             }
+            // Return the filtered and sorted list of products
             return Ok(filteredProducts.ToList());
         }
         [HttpGet("ByIdQuery")]
@@ -199,6 +204,11 @@ namespace Task1_RestfulApi.Controllers
         public Product ByIdRoute([FromRoute] int id)
         {
             return products?.FirstOrDefault(x => x.Id == id);
+        }
+        [HttpGet("ByNameRoute/{name}")]
+        public Product ByIdRoute([FromRoute] string name)
+        {
+            return products?.FirstOrDefault(x => x.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
 
     }
